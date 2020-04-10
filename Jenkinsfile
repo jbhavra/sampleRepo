@@ -24,7 +24,9 @@ pipeline {
 
         stage('Promote To Dev'){
             when{
-                env.BRANCH_NAME == "master"
+                expression {
+                    env.BRANCH_NAME == "master"
+                }
             }
             steps{
                 input message: 'Proceed for dev deployment?'
@@ -33,7 +35,9 @@ pipeline {
 
         stage('Deploy-Dev'){
             when{
-                env.BRANCH_NAME == "master"
+                expression {
+                    env.BRANCH_NAME == "master"
+                }
             }
             steps{
                 sh '''
@@ -53,7 +57,9 @@ pipeline {
 
         stage('finish'){
             when{
-                env.BRANCH_NAME == "master"
+                expression {
+                    env.BRANCH_NAME == "master"
+                }
             }
             steps{
                 input message: 'Stop App?'
@@ -62,7 +68,9 @@ pipeline {
 
         stage ('stop app'){
             when{
-                env.BRANCH_NAME == "master"
+                expression {
+                    env.BRANCH_NAME == "master"
+                }
             }
             steps{
                 sh '''
