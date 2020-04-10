@@ -23,12 +23,18 @@ pipeline {
         }
 
         stage('Promote To Dev'){
+            when{
+                env.BRANCH_NAME == "master"
+            }
             steps{
                 input message: 'Proceed for dev deployment?'
             }
         }
 
         stage('Deploy-Dev'){
+            when{
+                env.BRANCH_NAME == "master"
+            }
             steps{
                 sh '''
                     set -x
@@ -38,10 +44,31 @@ pipeline {
                     set -x
                     npm start &
                     sleep 1
-                    echo $!
+                    echo $! > .pidfile
                     set +x
                     
                   '''
+            }
+        }
+
+        stage('finish'){
+            when{
+                env.BRANCH_NAME == "master"
+            }
+            steps{
+                input message: 'Stop App?'
+            }
+        }
+
+        stage ('stop app'){
+            when{
+                env.BRANCH_NAME == "master"
+            }
+            steps{
+                sh '''
+                    set -x
+                    kill $(cat .pidfile)
+                   '''
             }
         }
     }
